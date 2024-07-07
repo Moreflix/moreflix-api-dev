@@ -17,6 +17,7 @@ def extract_xml_data(url):
     genre = soup.find('genre').text
     country = soup.find('country').text
     studio = soup.find('studio').text
+    rating = soup.find('rating').text
 
     # Extraer el texto después de "<![CDATA[" y antes de "]]>"
     plot_text = plot_cdata.split("<![CDATA[")[-1].split("]]>")[0]
@@ -25,8 +26,9 @@ def extract_xml_data(url):
     return {
         "Title": title,
         "Director": director,
-        "Plot": plot_text,
+        "Sinopsis": plot_text,
         "Year": year,
+        "Rating": rating,
         "Genre": genre,
         "Country": country,
         "Studio": studio

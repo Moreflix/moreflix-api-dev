@@ -1,5 +1,7 @@
-env
-auth/
-core/settings.py
-manage.py
 db.sqlite3
+.env/
+__pycache__/
+migrations/
+migrations
+media/
+static/
