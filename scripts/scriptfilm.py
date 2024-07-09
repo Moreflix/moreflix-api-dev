@@ -2,6 +2,16 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import urllib.parse
+import sys
+import os
+
+script_dir = os.path.dirname(__file__)  # Obtiene el directorio del script actual
+parent_dir = os.path.dirname(script_dir)  # Obtiene el directorio padre (Api)
+scripts_path = os.path.join(parent_dir, 'scripts')  # Construye la ruta al directorio 'scripts'
+sys.path.append(scripts_path)
+
+from xmlextract import extract_xml_data
+
 from xmlextract import extract_xml_data
 
 def get_film_data(film_url):
