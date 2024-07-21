@@ -23,11 +23,16 @@ def get_film_data(film_url):
         html = BeautifulSoup(req.text, "html.parser")
         links = html.find_all('a')
         video_links = []
+        cover_link = None
         nfo_link = None
         info = {}
 
         video_ext_regex = re.compile(r'.*\.(mp4|MP4|avi|AVI|mpg|MPG|mkv|MKV)$')
         nfo_ext_regex = re.compile(r'.*\.nfo$')
+        cover_link_element = html.find('a', text='cover')
+
+        if cover_link_element and cover_link_element.get('href'):
+            cover_link = urllib.parse.urljoin(film_url, cover_link_element.get('href'))
 
         nfo_found = False
 
@@ -41,6 +46,8 @@ def get_film_data(film_url):
                     nfo_link = urllib.parse.urljoin(film_url, href)
                     info = extract_xml_data(nfo_link)
                     info["Source"] = video_links
+                    if cover_link:
+                        info["Cover"] = cover_link
                     nfo_found = True
                     break
 

@@ -10,6 +10,7 @@ class Film(models.Model):
     genre = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     studio = models.CharField(max_length=100)
+    cover = models.ImageField(upload_to='films/covers/', blank=True, null=True)
 
     class Meta:
         db_table = 'film'

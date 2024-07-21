@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./data/db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: moreflix_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: leo13245
+      MYSQL_ROOT_PASSWORD: leo13245
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+
+# NOTAS PARA MAS ADELANTE
+
+# Ejecutar el docker-compose
+# docker-compose up --build
+
+
+# Exportar los datos de tu base de datos local a un archivo SQL.
+# mysqldump -u root -p moreflix_db > moreflix_db.sql
+
+
+# Luego de reiniciar debes poner esto en la variable volumes en el docker-compose
+# volumes:
+#       - ./data/db:/var/lib/mysql
+#       - ./moreflix_local_db.sql:/docker-entrypoint-initdb.d/moreflix_local_db.sql
+
+
+# Reiniciar los contenedores
+# docker-compose down
+# docker-compose up --build

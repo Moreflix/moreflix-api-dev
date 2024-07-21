@@ -38,7 +38,7 @@ class Command(BaseCommand):
                         self.stdout.write("Empty Folder")
                         continue
 
-                    time.sleep(2)  # Considera manejar esto de manera más eficiente
+                    time.sleep(2)
                     info_movies = get_film_data(movie_folder)
                     if "Error" in info_movies:
                         self.stdout.write(info_movies["Error"])
@@ -55,6 +55,7 @@ class Command(BaseCommand):
                         genre=info_movies.get("Genre", "Unknown Genre"),
                         country=info_movies.get("Country", "Unknown Country"),
                         studio=info_movies.get("Studio", "Unknown Studio"),
+                        cover = info_movies.get("Cover", "Unknown Cover"),
                     )
                     film.save()
 

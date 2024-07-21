@@ -60,10 +60,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+# Configuración de la base de datos MySQL en AWS RDS 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'moreflix_db',
+        'USER': 'root',
+        'PASSWORD': 'leo12345',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -108,11 +121,13 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True
 }
 
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Media files (Uploaded by users)
 MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # CORS_ALLOWED_ORIGINS = [
