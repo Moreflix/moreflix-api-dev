@@ -29,7 +29,7 @@ def get_film_data(film_url):
 
         video_ext_regex = re.compile(r'.*\.(mp4|MP4|avi|AVI|mpg|MPG|mkv|MKV)$')
         nfo_ext_regex = re.compile(r'.*\.nfo$')
-        cover_link_element = html.find('a', text='cover')
+        cover_link_element = html.find('a', text='landscape.jpg')
 
         if cover_link_element and cover_link_element.get('href'):
             cover_link = urllib.parse.urljoin(film_url, cover_link_element.get('href'))

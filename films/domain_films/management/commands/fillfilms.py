@@ -58,6 +58,7 @@ class Command(BaseCommand):
                         cover = info_movies.get("Cover", "Unknown Cover"),
                     )
                     film.save()
+                    print("Saved Successfully :)")
 
                 self.stdout.write(self.style.SUCCESS("Success"))
 
