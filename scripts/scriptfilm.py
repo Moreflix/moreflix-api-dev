@@ -5,14 +5,12 @@ import urllib.parse
 import sys
 import os
 
-script_dir = os.path.dirname(__file__)  # Obtiene el directorio del script actual
-parent_dir = os.path.dirname(script_dir)  # Obtiene el directorio padre (Api)
-scripts_path = os.path.join(parent_dir, 'scripts')  # Construye la ruta al directorio 'scripts'
+script_dir = os.path.dirname(__file__) 
+parent_dir = os.path.dirname(script_dir) 
+scripts_path = os.path.join(parent_dir, 'scripts')
 sys.path.append(scripts_path)
-
 from xmlextract import extract_xml_data
 
-from xmlextract import extract_xml_data
 
 def get_film_data(film_url):
     try:
@@ -30,27 +28,23 @@ def get_film_data(film_url):
 
         video_ext_regex = re.compile(r'.*\.(mp4|MP4|avi|AVI|mpg|MPG|mkv|MKV)$')
         nfo_ext_regex = re.compile(r'.*\.nfo$')
-        cover_found = False
-        nfo_found = False
-        subtitle_found = False
+
+        cover_link_element = next((link for link in links if 'landscape.jpg' in link.get('href', '')), None)
+        if cover_link_element:
+            cover_link = urllib.parse.urljoin(film_url, cover_link_element.get('href'))
 
         for link in links:
             href = link.get('href')
             if href:
-                if not cover_found and 'landscape.jpg' in href:
-                    cover_link = urllib.parse.urljoin(film_url, href)
-                    cover_found = True
-                elif not subtitle_found and href.endswith('.es.srt'):
+                if href.endswith('.es.srt') and not subtitle_link:
                     subtitle_link = urllib.parse.urljoin(film_url, href)
-                    subtitle_found = True
                 elif video_ext_regex.match(href):
                     full_url = urllib.parse.urljoin(film_url, href)
                     video_links.append(full_url)
-                elif nfo_ext_regex.match(href):
+                elif nfo_ext_regex.match(href) and not nfo_link:
                     nfo_link = urllib.parse.urljoin(film_url, href)
                     info = extract_xml_data(nfo_link)
                     info["Source"] = video_links
-                    nfo_found = True
                     if cover_link:
                         info["Cover"] = cover_link
                     if subtitle_link:

@@ -11,6 +11,7 @@ class Film(models.Model):
     country = models.CharField(max_length=100)
     studio = models.CharField(max_length=100)
     cover = models.ImageField(upload_to='films/covers/', blank=True, null=True)
+    subtitle = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         db_table = 'film'

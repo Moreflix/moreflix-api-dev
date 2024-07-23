@@ -6,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from films.domain_films.models import Film
 from scripts.scriptfilm import get_film_data
+from django.core.files.base import ContentFile
+from django.core.files.temp import NamedTemporaryFile
 
 def get_movie_folders(base_url, year):
     year_url = f"{base_url}{year}/"
@@ -38,13 +40,14 @@ class Command(BaseCommand):
                         self.stdout.write("Empty Folder")
                         continue
 
-                    time.sleep(2)
+                    time.sleep(3)
                     info_movies = get_film_data(movie_folder)
                     if "Error" in info_movies:
                         self.stdout.write(info_movies["Error"])
                         continue
                     
                     source = info_movies['Source'][0] if 'Source' in info_movies and info_movies['Source'] else "Unknown Source"
+                    
                     film = Film(
                         source=source,
                         title=info_movies.get("Title", "Unknown Title"),
@@ -55,12 +58,20 @@ class Command(BaseCommand):
                         genre=info_movies.get("Genre", "Unknown Genre"),
                         country=info_movies.get("Country", "Unknown Country"),
                         studio=info_movies.get("Studio", "Unknown Studio"),
-                        cover = info_movies.get("Cover", "Unknown Cover"),
+                        subtitle=info_movies.get("Subtitle", "Unknown Subtitles"),
                     )
                     film.save()
-                    print("Saved Successfully :)")
 
-                self.stdout.write(self.style.SUCCESS("Success"))
+                    cover_url = info_movies.get("Cover", None)
+                    if cover_url and cover_url != "Unknown Cover":
+                        try:
+                            response = requests.get(cover_url)
+                            if response.status_code == 200:
+                                film.cover.save(f"{film.title}_cover.jpg", ContentFile(response.content), save=True)
+                        except Exception as e:
+                            print(f"Error al descargar la imagen de la portada: {e}")
+
+                    print("Saved Successfully :)")
 
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Failed: {e}"))
