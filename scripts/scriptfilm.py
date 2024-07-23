@@ -25,30 +25,36 @@ def get_film_data(film_url):
         video_links = []
         cover_link = None
         nfo_link = None
+        subtitle_link = None
         info = {}
 
         video_ext_regex = re.compile(r'.*\.(mp4|MP4|avi|AVI|mpg|MPG|mkv|MKV)$')
         nfo_ext_regex = re.compile(r'.*\.nfo$')
-        cover_link_element = html.find('a', text='landscape.jpg')
-
-        if cover_link_element and cover_link_element.get('href'):
-            cover_link = urllib.parse.urljoin(film_url, cover_link_element.get('href'))
-
+        cover_found = False
         nfo_found = False
+        subtitle_found = False
 
         for link in links:
             href = link.get('href')
             if href:
-                if video_ext_regex.match(href):
+                if not cover_found and 'landscape.jpg' in href:
+                    cover_link = urllib.parse.urljoin(film_url, href)
+                    cover_found = True
+                elif not subtitle_found and href.endswith('.es.srt'):
+                    subtitle_link = urllib.parse.urljoin(film_url, href)
+                    subtitle_found = True
+                elif video_ext_regex.match(href):
                     full_url = urllib.parse.urljoin(film_url, href)
                     video_links.append(full_url)
                 elif nfo_ext_regex.match(href):
                     nfo_link = urllib.parse.urljoin(film_url, href)
                     info = extract_xml_data(nfo_link)
                     info["Source"] = video_links
+                    nfo_found = True
                     if cover_link:
                         info["Cover"] = cover_link
-                    nfo_found = True
+                    if subtitle_link:
+                        info["Subtitle"] = subtitle_link
                     break
 
         return info
