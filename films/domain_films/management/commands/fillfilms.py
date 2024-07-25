@@ -8,6 +8,9 @@ from films.domain_films.models import Film
 from scripts.scriptfilm import get_film_data
 from django.core.files.base import ContentFile
 from django.core.files.temp import NamedTemporaryFile
+from decouple import Config, Csv, RepositoryEnv
+
+config = Config(RepositoryEnv('.env'))
 
 def get_movie_folders(base_url, year):
     year_url = f"{base_url}{year}/"
@@ -29,7 +32,7 @@ class Command(BaseCommand):
     help = 'Fill the Film table with data'
 
     def handle(self, *args, **kwargs):
-        base_url = "https://visuales.uclv.cu/Peliculas/Extranjeras/"
+        base_url = config('POINT', cast=Csv())
         current_year = datetime.datetime.now().year
 
         try:
