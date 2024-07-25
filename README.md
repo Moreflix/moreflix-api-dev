@@ -1,4 +1,4 @@
-![logo_brand_slogan](https://github.com/user-attachments/assets/86db03ee-8267-4ae3-8f9e-4d60c3190003)
+![logo_brand_slogan](https://github.com/user-attachments/assets/ea75c58f-ed44-432e-91ec-c962c7bd8caf)
 # This rest api is intended for the services of the Moreflix streaming platform
 >[!IMPORTANT]
  It is still in development
