@@ -6,6 +6,7 @@ from films.domain_films.models import Film
 from films.application.serializers.films_json import FilmSerializer
 from rest_framework.permissions import IsAuthenticated
 
+
 '''Function to get all films to the DB'''
 @api_view(['GET'])
 def get_all_films(request):
